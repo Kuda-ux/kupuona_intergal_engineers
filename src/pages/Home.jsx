@@ -66,7 +66,8 @@ const Home = () => {
   const partners = [
     { name: 'Zimbuku Trust Microfinance', type: 'Financial Partner' },
     { name: 'Chicken Hut', type: 'Commercial Client' },
-    { name: 'Ecobank', type: 'Banking Partner' }
+    { name: 'Ecobank', type: 'Banking Partner' },
+    { name: 'The Planet Pharmaceuticals', type: 'Commercial Client', address: '29 Cruster Road Southerton, Harare' }
   ];
 
   return (
