@@ -1,13 +1,16 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { 
   Phone, 
   Mail, 
   MapPin, 
-  Clock,
+  Clock, 
   Send,
-  MessageCircle,
-  CheckCircle
+  CheckCircle,
+  ArrowRight,
+  MessageCircle
 } from 'lucide-react';
+import { images } from '../constants/images';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -17,280 +20,299 @@ const Contact = () => {
     service: '',
     message: ''
   });
-  const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 5000);
+    setIsSubmitting(true);
+    
+    // Simulate form submission
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+      setFormData({ name: '', email: '', phone: '', service: '', message: '' });
+    }, 1500);
   };
 
   const contactInfo = [
     {
       icon: Phone,
       title: 'Phone',
-      details: ['+263 771 492 799', '+263 718 340 328'],
-      action: 'tel:+263771492799'
+      details: ['+263 771 492 799', '+263 718 340 328 (WhatsApp)'],
+      action: 'tel:+263771492799',
+      color: 'from-blue-500 to-indigo-500'
     },
     {
       icon: Mail,
       title: 'Email',
       details: ['info@kupuonazim.co.zw', 'admin@kupuonazim.co.zw'],
-      action: 'mailto:info@kupuonazim.co.zw'
+      action: 'mailto:info@kupuonazim.co.zw',
+      color: 'from-emerald-500 to-teal-500'
     },
     {
       icon: MapPin,
       title: 'Address',
       details: ['14752 Makoni Shopping Centre', 'Chitungwiza, Zimbabwe'],
-      action: null
+      action: '#',
+      color: 'from-amber-500 to-orange-500'
     },
     {
       icon: Clock,
       title: 'Business Hours',
-      details: ['Monday - Friday: 8:00 AM - 5:00 PM', 'Saturday: 8:00 AM - 1:00 PM'],
-      action: null
+      details: ['Mon - Fri: 8:00 AM - 5:00 PM', 'Sat: 8:00 AM - 1:00 PM'],
+      action: '#',
+      color: 'from-purple-500 to-pink-500'
     }
+  ];
+
+  const services = [
+    'Solar Installation',
+    'Generator Sales/Rental',
+    'Electrical Installation',
+    'Maintenance & Repairs',
+    'Consultation',
+    'Other'
   ];
 
   return (
     <>
       {/* Hero Section */}
-      <section className="relative py-24 bg-gradient-to-br from-primary via-primary-light to-primary overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-secondary rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent rounded-full blur-3xl"></div>
+      <section className="relative py-32 overflow-hidden">
+        <div className="absolute inset-0">
+          <img 
+            src={images.solarHouse} 
+            alt="Contact Kupuona" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/85 to-primary/70"></div>
         </div>
         
         <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="max-w-3xl">
-            <span className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-white text-sm mb-6">
-              <span className="w-2 h-2 bg-secondary rounded-full"></span>
-              Contact Us
+            <span className="inline-block px-4 py-2 bg-secondary/20 text-secondary font-semibold text-sm rounded-full mb-6">
+              CONTACT US
             </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-              Let's <span className="text-secondary">Power</span> Your Future
+            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
+              Get In <span className="text-secondary">Touch</span>
             </h1>
-            <p className="text-xl text-gray-300 leading-relaxed">
-              Ready to transform your energy infrastructure? Get in touch with our team 
-              for a free consultation and personalized quote.
+            <p className="text-xl text-gray-300 mb-8">
+              Ready to start your energy project? Contact Kupuona Integral Engineers today for a free consultation and quote.
             </p>
+            <a
+              href="https://wa.me/263718340328"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-xl font-bold transition-all hover:shadow-xl"
+            >
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Chat on WhatsApp - Fastest Response
+            </a>
           </div>
         </div>
       </section>
 
       {/* Contact Info Cards */}
-      <section className="py-12 bg-white border-b">
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 -mt-24 relative z-20">
             {contactInfo.map((info, index) => (
-              <div 
+              <a
                 key={index}
-                className="bg-gradient-to-br from-gray-50 to-white p-6 rounded-xl border border-gray-100 hover:border-secondary/30 hover:shadow-lg transition-all"
+                href={info.action}
+                className="group bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:-translate-y-2"
               >
-                <div className="w-12 h-12 bg-secondary/10 rounded-lg flex items-center justify-center mb-4">
-                  <info.icon size={24} className="text-secondary" />
+                <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-5 bg-gradient-to-r ${info.color}`}>
+                  <info.icon size={26} className="text-white" />
                 </div>
-                <h3 className="font-bold text-primary mb-2">{info.title}</h3>
+                <h3 className="text-lg font-bold text-primary mb-3">{info.title}</h3>
                 {info.details.map((detail, idx) => (
-                  info.action ? (
-                    <a 
-                      key={idx}
-                      href={info.action}
-                      className="block text-gray-600 hover:text-secondary transition-colors"
-                    >
-                      {detail}
-                    </a>
-                  ) : (
-                    <p key={idx} className="text-gray-600">{detail}</p>
-                  )
+                  <p key={idx} className="text-gray-600 text-sm">{detail}</p>
                 ))}
-              </div>
+              </a>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Contact Form & Map */}
-      <section className="py-20 bg-white">
+      {/* Contact Form & Map Section */}
+      <section className="py-24 bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-16">
             {/* Contact Form */}
             <div>
-              <h2 className="text-3xl font-bold text-primary mb-2">Send Us a Message</h2>
+              <span className="inline-block px-4 py-2 bg-secondary/10 text-secondary font-semibold text-sm rounded-full mb-4">
+                SEND US A MESSAGE
+              </span>
+              <h2 className="text-4xl font-bold text-primary mb-6">
+                Request a <span className="text-secondary">Free Quote</span>
+              </h2>
               <p className="text-gray-600 mb-8">
-                Fill out the form below and our team will get back to you within 24 hours.
+                Fill out the form below and our team will get back to you within 24 hours with a customized solution for your energy needs.
               </p>
 
-              {submitted ? (
-                <div className="bg-green-50 border border-green-200 rounded-xl p-8 text-center">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <CheckCircle size={32} className="text-green-600" />
+              {isSubmitted ? (
+                <div className="bg-green-50 border border-green-200 rounded-2xl p-8 text-center">
+                  <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle size={32} className="text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-green-800 mb-2">Message Sent!</h3>
-                  <p className="text-green-700">
-                    Thank you for contacting us. We'll get back to you shortly.
+                  <h3 className="text-2xl font-bold text-green-700 mb-2">Message Sent!</h3>
+                  <p className="text-green-600 mb-6">
+                    Thank you for contacting Kupuona Integral Engineers. We'll get back to you within 24 hours.
                   </p>
+                  <button
+                    onClick={() => setIsSubmitted(false)}
+                    className="text-secondary font-semibold hover:underline"
+                  >
+                    Send Another Message
+                  </button>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid sm:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Full Name *
-                      </label>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name *</label>
                       <input
                         type="text"
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all"
-                        placeholder="Your name"
+                        className="w-full px-4 py-4 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all"
+                        placeholder="John Doe"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Email Address *
-                      </label>
-                      <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all"
-                        placeholder="your@email.com"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid sm:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Phone Number
-                      </label>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Phone Number *</label>
                       <input
                         type="tel"
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all"
+                        required
+                        className="w-full px-4 py-4 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all"
                         placeholder="+263 7XX XXX XXX"
                       />
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Service Interested In
-                      </label>
-                      <select
-                        name="service"
-                        value={formData.service}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all bg-white"
-                      >
-                        <option value="">Select a service</option>
-                        <option value="solar">Solar Energy Systems</option>
-                        <option value="generator">Generator Solutions</option>
-                        <option value="electrical">Electrical Installations</option>
-                        <option value="maintenance">Maintenance & Support</option>
-                        <option value="other">Other</option>
-                      </select>
-                    </div>
                   </div>
-
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Message *
-                    </label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="w-full px-4 py-4 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all"
+                      placeholder="john@example.com"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Service Required *</label>
+                    <select
+                      name="service"
+                      value={formData.service}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-4 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all"
+                    >
+                      <option value="">Select a service</option>
+                      {services.map((service, index) => (
+                        <option key={index} value={service}>{service}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Your Message *</label>
                     <textarea
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
                       required
                       rows={5}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all resize-none"
-                      placeholder="Tell us about your project or inquiry..."
+                      className="w-full px-4 py-4 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all resize-none"
+                      placeholder="Tell us about your project or requirements..."
                     ></textarea>
                   </div>
-
                   <button
                     type="submit"
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-secondary hover:bg-secondary-light text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all"
+                    disabled={isSubmitting}
+                    className="w-full bg-secondary hover:bg-secondary-light disabled:bg-gray-400 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all hover:shadow-xl flex items-center justify-center gap-3"
                   >
-                    Send Message
-                    <Send size={20} />
+                    {isSubmitting ? (
+                      <>
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <Send size={20} />
+                        Send Message
+                      </>
+                    )}
                   </button>
                 </form>
               )}
             </div>
 
-            {/* Quick Contact & Map */}
+            {/* Map & Quick Contact */}
             <div className="space-y-8">
               {/* WhatsApp CTA */}
-              <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-8 text-white">
-                <div className="flex items-start gap-4">
-                  <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <MessageCircle size={28} />
+              <div className="bg-gradient-to-r from-green-500 to-green-600 p-8 rounded-3xl text-white">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
+                    <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold mb-2">Quick Response via WhatsApp</h3>
-                    <p className="text-green-100 mb-4">
-                      Need a faster response? Chat with us directly on WhatsApp for immediate assistance.
-                    </p>
-                    <a
-                      href="https://wa.me/263771492799"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-green-50 transition-all"
-                    >
-                      <MessageCircle size={20} />
-                      Chat on WhatsApp
-                    </a>
+                    <h3 className="text-xl font-bold">Prefer WhatsApp?</h3>
+                    <p className="text-green-100">Get instant response from our team</p>
                   </div>
                 </div>
+                <p className="text-green-100 mb-6">
+                  For faster response, chat with us directly on WhatsApp. Our team is available to answer your questions and provide quotes.
+                </p>
+                <a
+                  href="https://wa.me/263718340328"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-white text-green-600 px-6 py-3 rounded-xl font-bold hover:bg-green-50 transition-colors"
+                >
+                  Chat Now: +263 718 340 328
+                  <ArrowRight size={18} />
+                </a>
               </div>
 
               {/* Map Placeholder */}
-              <div className="bg-gradient-to-br from-gray-100 to-gray-50 rounded-2xl overflow-hidden border border-gray-200">
-                <div className="aspect-video bg-gray-200 flex items-center justify-center">
-                  <div className="text-center p-8">
-                    <MapPin size={48} className="text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-700 mb-2">Our Location</h3>
-                    <p className="text-gray-500">
-                      14752 Makoni Shopping Centre<br />
-                      Chitungwiza, Zimbabwe
-                    </p>
+              <div className="bg-gray-100 rounded-3xl overflow-hidden h-80 relative">
+                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-primary/5 to-secondary/5">
+                  <div className="text-center">
+                    <MapPin size={48} className="text-secondary mx-auto mb-4" />
+                    <h3 className="text-xl font-bold text-primary mb-2">Our Location</h3>
+                    <p className="text-gray-600">14752 Makoni Shopping Centre</p>
+                    <p className="text-gray-600">Chitungwiza, Zimbabwe</p>
                   </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="font-bold text-primary mb-2">Visit Our Office</h3>
-                  <p className="text-gray-600 text-sm">
-                    We welcome walk-in consultations during business hours. 
-                    Our team is ready to discuss your energy needs and provide expert advice.
-                  </p>
                 </div>
               </div>
 
               {/* Emergency Contact */}
-              <div className="bg-gradient-to-br from-primary to-primary-light rounded-2xl p-6 text-white">
-                <h3 className="font-bold mb-2">24/7 Emergency Support</h3>
-                <p className="text-gray-300 text-sm mb-4">
-                  For urgent generator or electrical emergencies, our support team is available around the clock.
-                </p>
-                <a
-                  href="tel:+263771492799"
-                  className="inline-flex items-center gap-2 text-secondary font-semibold hover:text-secondary-light transition-colors"
-                >
-                  <Phone size={18} />
-                  +263 771 492 799
-                </a>
+              <div className="bg-red-50 border border-red-100 p-6 rounded-2xl">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-red-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Phone size={24} className="text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-red-700 mb-1">Emergency Service</h3>
+                    <p className="text-red-600 text-sm mb-2">
+                      For urgent electrical or power issues, call us immediately.
+                    </p>
+                    <a href="tel:+263771492799" className="text-red-700 font-bold hover:underline">
+                      +263 771 492 799
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -298,45 +320,43 @@ const Contact = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-24 bg-white">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <span className="text-secondary font-semibold text-sm uppercase tracking-wider">FAQ</span>
-            <h2 className="text-3xl font-bold text-primary mt-4 mb-4">
-              Common Questions
+          <div className="text-center mb-16">
+            <span className="inline-block px-4 py-2 bg-secondary/10 text-secondary font-semibold text-sm rounded-full mb-4">
+              FAQ
+            </span>
+            <h2 className="text-4xl font-bold text-primary mb-6">
+              Common <span className="text-secondary">Questions</span>
             </h2>
           </div>
 
           <div className="space-y-4">
             {[
               {
-                q: 'How do I request a quote for solar installation?',
-                a: 'You can request a quote by filling out the contact form above, calling us directly at +263 771 492 799, or sending a WhatsApp message. We\'ll schedule a free site assessment to understand your needs and provide a detailed quotation.'
+                q: 'How do I request a quote?',
+                a: 'You can request a free quote by filling out the contact form above, calling us at +263 771 492 799, or sending a WhatsApp message to +263 718 340 328. We typically respond within 24 hours.'
               },
               {
-                q: 'Do you offer financing options for solar systems?',
-                a: 'Yes, through our partnership with Zimbuku Trust Microfinance, we offer flexible payment plans to make solar energy accessible. Contact us to learn about available financing options.'
+                q: 'Do you offer free site assessments?',
+                a: 'Yes! We offer free site assessments for all potential projects. Our team will visit your location, assess your energy needs, and provide a detailed proposal with transparent pricing.'
               },
               {
-                q: 'What areas do you service in Zimbabwe?',
-                a: 'While based in Chitungwiza, we provide services throughout Zimbabwe including Harare, Bulawayo, Mutare, Gweru, and surrounding areas. Contact us to confirm service availability in your location.'
+                q: 'What areas do you serve?',
+                a: 'Kupuona Integral Engineers serves clients throughout Zimbabwe, including Chitungwiza, Harare, Bulawayo, Mutare, Gweru, and all surrounding areas.'
               },
               {
-                q: 'How long does a typical solar installation take?',
-                a: 'Residential installations typically take 1-3 days, while commercial projects may take 1-2 weeks depending on system size and complexity. We\'ll provide a detailed timeline during the quotation process.'
-              },
-              {
-                q: 'Do you provide maintenance services after installation?',
-                a: 'Yes, we offer comprehensive maintenance packages including regular inspections, cleaning, and repairs. All our installations come with warranty coverage and ongoing support.'
+                q: 'Do you provide warranties?',
+                a: 'Yes, all our installations come with comprehensive warranties. Solar panels typically have 25-year warranties, inverters 5-10 years, and our workmanship is guaranteed.'
               }
             ].map((faq, index) => (
               <details 
                 key={index}
-                className="bg-white rounded-xl border border-gray-100 overflow-hidden group"
+                className="bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden group"
               >
-                <summary className="p-6 cursor-pointer font-semibold text-primary hover:text-secondary transition-colors flex items-center justify-between">
+                <summary className="p-6 cursor-pointer font-bold text-primary hover:text-secondary transition-colors flex items-center justify-between">
                   {faq.q}
-                  <span className="text-secondary ml-4">+</span>
+                  <span className="text-secondary text-2xl ml-4 group-open:rotate-45 transition-transform">+</span>
                 </summary>
                 <div className="px-6 pb-6 text-gray-600">
                   {faq.a}
